@@ -1,48 +1,92 @@
-" .vimrc File
-" Maintained by: Jeffrey Way
-" jeffrey@jeffrey-way.com
-" http://net.tutsplus.com
-"
+set nocompatible   " Disable vi-compatibility
+set t_Co=256
 
-set wrap
-set autowrite "Write the old file out when switching between files.
-set ruler
-set timeoutlen=500
-set hidden
 set background=dark
 colorscheme solarized
-set guifont=DejaVu\ Sans\ Mono:h14
-set tabstop=3
-set shiftwidth=3
-set softtabstop=3
-set expandtab
-set showcmd
-set showmode
-set number
-set smartindent
-set autoindent
-set laststatus=2
-set linespace=3
-set wrap
-set textwidth=79
-set formatoptions=qrn1
-set incsearch
-set hlsearch
-set ignorecase
-set smartcase
-set go-=T "Hide MacVim toolbar by default
-set foldenable
-set mousehide
-set splitbelow
-set wildmenu
-set wildmode=list:longest
+" set guifont=DejaVu\ Sans\ Mono:h14
+
+set guioptions-=T " Removes top toolbar
+set guioptions-=r " Removes right hand scroll bar
+set go-=L " Removes left hand scroll bar
+set linespace=4
+
+set showmode                    " always show what mode we're currently editing in
+set wrap                        " wrap lines
+set tabstop=4                   " a tab is four spaces
+set smarttab
+set tags=tags
+set softtabstop=4               " when hitting <BS>, pretend like a tab is removed, even if spaces
+set expandtab                   " expand tabs by default (overloadable per file type later)
+set shiftwidth=4                " number of spaces to use for autoindenting
+set shiftround                  " use multiple of shiftwidth when indenting with '<' and '>'
+set backspace=indent,eol,start  " allow backspacing over everything in insert mode
+set autoindent                  " always set autoindenting on
+set copyindent                  " copy the previous indentation on autoindenting
+set number                      " always show line numbers
+set ignorecase                  " ignore case when searching
+set smartcase                   " ignore case if search pattern is all lowercase,
+set timeout timeoutlen=200 ttimeoutlen=100
+set visualbell           " don't beep
+set noerrorbells         " don't beep
+set autowrite  "Save on buffer switch
+set mouse=a
+
 set backupdir=~/.vim/tmp/backup// " backups
 set directory=~/.vim/tmp/swap// " swap files
-set backup " enable backup
-set showmatch " show matching brackets
 
-"Forget compatibility with Vi. Who cares.
-set nocompatible
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = ","
+let g:mapleader = ","
+
+" Fast saves
+nmap <leader>w :w!<cr>
+
+" Down is really the next line
+nnoremap j gj
+nnoremap k gk
+
+"Easy escaping to normal model
+imap jj <esc>
+
+"Auto change directory to match current file ,cd
+nnoremap ,cd :cd %:p:h<CR>:pwd<CR>
+
+"easier window navigation
+
+nmap <C-h> <C-w>h
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
+
+"Resize vsplit
+nmap <C-v> :vertical resize +5<cr>
+nmap 25 :vertical resize 40<cr>
+nmap 50 <c-w>=
+nmap 75 :vertical resize 120<cr>
+
+nmap <C-b> :NERDTreeToggle<cr>
+
+"Load the current buffer in Chrome
+nmap ,c :!open -a Google\ Chrome<cr>
+
+"Show (partial) command in the status line
+set showcmd
+
+" Create split below
+nmap :sp :rightbelow sp<cr>
+
+" Quickly go forward or backward to buffer
+nmap :bp :BufSurfBack<cr>
+nmap :bn :BufSurfForward<cr>
+
+highlight Search cterm=underline
+
+" Powerline (Fancy thingy at bottom stuff)
+let g:Powerline_symbols = 'fancy'
+set laststatus=2   " Always show the statusline
+set encoding=utf-8 " Necessary to show Unicode glyphs
+set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
 
 "Enable filetypes
 filetype on
@@ -50,53 +94,8 @@ filetype plugin on
 filetype indent on
 syntax on
 
-"Hard-wrap paragraphs of text
-nnoremap <leader>q gqip
-
-"Shortcut to fold tags with leader (usually \) + ft
-nnoremap <leader>ft Vatzf
-
-" Create dictionary for custom expansions
-"set dictionary+=/Users/jeff_way/.vim/dict.txt
-
-"Opens a vertical split and switches over (\v)
-nnoremap <leader>v <C-w>v<C-w>l
-
-" session settings
-set sessionoptions=resize,winpos,winsize,buffers,tabpages,folds,curdir,help
-
-"Set up an HTML5 template for all new .html files
-"autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl
-
-"Map a change directory to the desktop - Mac specific
-nmap <leader>d :cd ~/Desktop<cr>:e.<cr>
-
-"Shortcut for editing  vimrc file in a new tab
-nmap <leader>ev :tabedit $MYVIMRC<cr>
-
-"Change zen coding plugin expansion key to shift + e
-let g:user_zen_expandabbr_key = '<C-e>'
-
-"Faster shortcut for commenting. Requires T-Comment plugin
-map <leader>c <c-_><c-_>
-
-"Saves time; maps the spacebar to colon
-nmap <space> :
-
-"Automatically change current directory to that of the file in the buffer
-autocmd BufEnter * cd %:p:h
-
-"Map code completion to , + tab
-imap <leader><tab> <C-x><C-o>
-
 "matching braces
 inoremap { {<CR>}<Esc>ko
-
-"Map escape key to jj -- much faster
-imap jj <esc>
-
-"Delete all buffers (via Derek Wyatt)
-nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
 
 "Bubble single lines (kicks butt)
 "http://vimcasts.org/episodes/bubbling-text/
@@ -115,24 +114,15 @@ if has("autocmd")
  augroup END
 endif
 
-" easier window navigation
-nmap <C-h> <C-w>h
-nmap <C-j> <C-w>j
-nmap <C-k> <C-w>k
-nmap <C-l> <C-w>l
-
-"------------------------"
-"NERDTREE PLUGIN SETTINGS
-"------------------------"
-"Shortcut for NERDTreeToggle
-nmap <leader>nt :NERDTreeToggle <CR>
-
 "Show hidden files in NerdTree
 let NERDTreeShowHidden=1
 
-"autopen NERDTree and focus cursor in new document
-autocmd VimEnter * NERDTree
-autocmd VimEnter * wincmd p
+" Remove search results
+command! H let @/=""
+
+" Open splits
+nmap vs :vsplit<cr>
+nmap sp :split<cr>
 
 "Helpeful abbreviations
 iab lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
