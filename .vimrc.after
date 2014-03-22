@@ -1,4 +1,3 @@
-set nocompatible   " Disable vi-compatibility
 set t_Co=256
 
 set background=dark
@@ -17,7 +16,7 @@ set go-=L " Removes left hand scroll bar
 set linespace=2
 
 set showmode                    " always show what mode we're currently editing in
-set wrap                        " wrap lines
+set nowrap                        " wrap lines
 set tabstop=4                   " a tab is four spaces
 set smarttab
 set tags=tags
@@ -41,10 +40,6 @@ set splitbelow
 set backupdir=~/.vim/tmp/backup// " backups
 set directory=~/.vim/tmp/swap// " swap files
 
-" With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
-let mapleader = ","
-let g:mapleader = ","
 
 " Fast saves
 nmap <leader>w :w!<cr>
@@ -79,7 +74,7 @@ nmap 50 <c-w>=
 nmap 75 :vertical resize 120<cr>
 
 nmap <C-b> :NERDTreeToggle<cr>
-
+let g:buffergator_autoexpand_on_split = 0
 "Load the current buffer in Chrome
 nmap ,c :!open -a Google\ Chrome<cr>
 
@@ -108,7 +103,7 @@ filetype indent on
 syntax on
 
 "matching braces
-inoremap { {<CR>}<Esc>ko
+inoremap { {}<Left>
 inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap ' ''<Left>
