@@ -101,11 +101,26 @@ set encoding=utf-8 " Necessary to show Unicode glyphs
 set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
 
 "Enable filetypes
-filetype on
-filetype plugin on
-filetype indent on
 let g:calendar_navi='top'
+
+"===================================================================
+" THE NECESSARY STUFF
+" The three lines below are necessary for VimOrganizer to work right
+" ==================================================================
+let g:ft_ignore_pat = '\.org'
+filetype plugin indent on
+" and then put these lines in vimrc somewhere after the line above
+au! BufRead,BufWrite,BufWritePost,BufNewFile *.org 
+au BufEnter *.org            call org#SetOrgFileType()
+" let g:org_capture_file = '~/org_files/mycaptures.org'
+command! OrgCapture :call org#CaptureBuffer()
+command! OrgCaptureFile :call org#OpenCaptureFile()
 syntax on
+
+" Orgmode Stuff
+au! BufRead,BufWrite,BufWritePost,BufNewFile *.org
+    au BufEnter *.org            call org#SetOrgFileType()
+:let g:agenda_files=['~/Dropbox/orgmode/work.org']
 
 "matching braces
 inoremap { {<CR>}<Esc>ko
